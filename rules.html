@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EclipseESK - Server Rules</title>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --discord-bg: #36393f;
+            --discord-dark: #2f3136;
+            --discord-darker: #202225;
+            --discord-accent: #5865F2;
+            --discord-accent-hover: #4752C4;
+            --discord-text: #8a8a8b;
+            --discord-header: #ffffff;
+            --discord-success: #3ba55c;
+            --discord-danger: #ed4245;
+            --discord-yellow: #fee75c;
+            --discord-purple: #eb459e; /* Adjusted for better visibility */
+            
+            --nav-bg: #000000;
+            --border-color: #1a1a1a;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--discord-bg);
+            color: var(--discord-text);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--discord-dark); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--discord-darker); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a1b1e; 
+        }
+
+        /* --- Utilities --- */
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* --- Navigation --- */
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo-link:hover { opacity: 0.8; }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--discord-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            color: var(--discord-header);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.025em;
+        }
+
+        /* Desktop Menu */
+        .desktop-menu {
+            display: none; /* Hidden on mobile */
+            align-items: center;
+            gap: 2rem;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            color: var(--discord-text);
+        }
+        .nav-link:hover {
+            color: var(--discord-header);
+        }
+
+        .btn-join {
+            background-color: var(--discord-accent);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 4px;
+        }
+        .btn-join:hover {
+            background-color: var(--discord-accent-hover);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-toggle {
+            display: block;
+            background: none;
+            border: none;
+            color: var(--discord-text);
+            cursor: pointer;
+        }
+        .mobile-toggle:hover { color: var(--discord-header); }
+
+/* --- Nav Dropdown --- */
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--discord-darker);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            padding: 0.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-content a {
+            color: var(--discord-text);
+            padding: 0.75rem 1rem;
+            display: block;
+        }
+        .dropdown-content a:hover { background-color: var(--discord-accent); color: var(--discord-header); }
+        .nav-dropdown:hover .dropdown-content { display: block; }
+
+
+        /* Mobile Dropdown */
+        .mobile-menu {
+            display: none; /* Hidden by default */
+            background-color: #000000;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+            padding: 1rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .mobile-menu.active {
+            display: flex;
+        }
+        .mobile-menu a {
+            display: block;
+            padding: 0.5rem 0;
+        }
+        .mobile-menu .btn-join {
+            text-align: center;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding-top: 8rem; /* Account for fixed header */
+            padding-bottom: 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: var(--discord-header);
+        }
+
+        .intro-text {
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+
+        /* --- Code Block Rules Styling --- */
+        .code-window {
+            background-color: var(--discord-dark);
+            border-radius: 6px;
+            padding: 1.5rem;
+            border: 1px solid #1f2937;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .window-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #374151;
+            font-size: 0.75rem;
+            color: #6b7280;
+            align-items: center;
+            user-select: none;
+        }
+        
+        .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .dot.red { background-color: #f87171; }
+        .dot.yellow { background-color: #facc15; }
+        .dot.green { background-color: #4ade80; }
+        .filename { margin-left: 0.5rem; }
+
+        .rules-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            color: var(--discord-text);
+        }
+
+        .rule-item {
+            display: flex;
+        }
+
+        .line-number {
+            color: #4b5563;
+            margin-right: 1.5rem;
+            user-select: none;
+            min-width: 1.5rem;
+            text-align: right;
+        }
+
+        .rule-content {
+            flex: 1;
+        }
+
+        .rule-title { font-weight: 700; }
+        .rule-desc { 
+            margin-top: 0.25rem; 
+            color: #9ca3af; 
+            display: block;
+        }
+
+        /* Syntax Highlighting Colors */
+        .syntax-blue { color: var(--discord-accent); }
+        .syntax-green { color: var(--discord-success); }
+        .syntax-red { color: var(--discord-danger); }
+        .syntax-yellow { color: var(--discord-yellow); }
+        .syntax-purple { color: #d946ef; }
+        .comment { color: #6b7280; font-style: italic; font-size: 0.75rem; }
+
+        .footer-note {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #374151;
+        }
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: #000000;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .footer-links a:hover { color: var(--discord-header); }
+        .footer-links { color: #6b7280; font-size: 0.875rem; display: flex; gap: 1.5rem; }
+
+        /* --- Media Queries --- */
+        @media (min-width: 768px) {
+            .mobile-toggle { display: none; }
+            .desktop-menu { display: flex; }
+            .footer-content { flex-direction: row; justify-content: space-between; }
+            .page-title { font-size: 2.25rem; }
+            .code-window { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <!-- Logo Section -->
+                <a href="index.html" class="logo-link">
+                    <div class="logo-icon">
+                        <img style="width: 45px; border-radius: 20px;" src="assets/favicon.png">
+                    </div>
+                    <span class="logo-text">EclipseESK</span>
+                </a>
+
+                <!-- Desktop Links -->
+                <div class="desktop-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="rules.html" class="nav-link">Rules</a>
+                    <div class="nav-dropdown">
+                        <a href="guides.html" class="nav-link">Guides</a>
+                        <div class="dropdown-content">
+                            <a href="onl-guides/getting-started.html">Getting Started</a>
+                        </div>
+                    </div>
+                    <a href="https://discord.gg/apB5FThr4H" class="btn-join">Join Server</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="mobile-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="rules.html" class="nav-link">Rules</a>
+                <a href="guides.html" class="nav-link">Guides</a>
+                <a href="https://discord.gg/apB5FThr4H" class="btn-join">Join Server</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="rules" class="main-content container">
+        <div class="page-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ed4245" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <h1 class="page-title">Server Rules</h1>
+        </div>
+
+        <p class="intro-text">
+            Welcome to the server! These rules are designed to ensure a fun, safe, and respectful environment for all members. By staying in this server, you agree to abide by these guidelines.
+        </p>
+
+        <!-- Code Block Style Rules -->
+        <div class="code-window">
+            <div class="window-header">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+                <span class="filename">server_rules.md</span>
+            </div>
+            
+            <div class="rules-list">
+                
+                <!-- Section 1: Respect and General Conduct (Zero Tolerance) -->
+                <div class="rule-item">
+                    <span class="line-number">01</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">1. RESPECT AND GENERAL CONDUCT</span>
+                        <span class="rule-desc">(Zero Tolerance)</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">02</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">1.1. No Harassment or Discrimination</span>
+                        <span class="rule-desc">Treat all members with respect. Any form of personal attack, bullying, or harassment is strictly forbidden.</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">03</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">1.1. (Cont.) Absolute Zero Tolerance</span>
+                        <span class="rule-desc">Zero Tolerance for hate speech, racism, sexism, homophobia, transphobia, or discrimination based on age, religion, or disability.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">04</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">1.1. Specific Slur Penalty</span>
+                        <span class="rule-desc">Use of hard-R racial slurs results in an immediate 1-Hour Timeout Minimum, followed by escalated review for a permanent ban.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">05</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-blue">1.2. Maintain a Positive Environment</span>
+                        <span class="rule-desc">Keep discussions constructive. Excessive negativity, gatekeeping, or instigating arguments (flaming) is not permitted.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">06</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-blue">1.2. (Cont.) Offensive Media</span>
+                        <span class="rule-desc">Do not post messages, memes, or media that are intentionally offensive, crude, or designed to provoke a negative reaction.</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">07</span>
+                    <div class="rule-content">
+                        <span class="comment">// ---</span>
+                    </div>
+                </div>
+
+                <!-- Section 2: Content and Sharing -->
+                <div class="rule-item">
+                    <span class="line-number">08</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-purple">2. CONTENT AND SHARING</span>
+                        <span class="rule-desc">Adherence to content policies is strictly enforced.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">09</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-purple">2.1. Strict Anti-Spam/Flooding Policy</span>
+                        <span class="rule-desc">No Spamming: Do not flood text channels with rapid-fire messages, overly long paragraphs, or excessive emojis/reactions.</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">10</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-purple">2.1. (Cont.) Excessive Tagging</span>
+                        <span class="rule-desc">Do not intentionally tag staff, moderators, or general members repeatedly or unnecessarily. Use channels for their intended purpose.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">11</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">2.2. No External Links (Strict Policy)</span>
+                        <span class="rule-desc">For the safety and security of all members, NO EXTERNAL LINKS are permitted, period. This includes all clickable URLs and invite links.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">12</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">2.2. (Cont.) Resource Sharing</span>
+                        <span class="rule-desc">If you need to share a resource, please ask a Moderator for assistance, and they may share it on your behalf after verification.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">13</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">2.3. No NSFW, Gore, or Illegal Content</span>
+                        <span class="rule-desc">Pornographic, excessively graphic (gore), or disturbing content is strictly forbidden in all channels.</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">14</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-red">2.3. (Cont.) Illegal Activities</span>
+                        <span class="rule-desc">Content promoting or discussing illegal activities (piracy, hacking, self-harm) results in an immediate ban and reporting.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">15</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-yellow">2.4. No Self-Promotion or Advertising</span>
+                        <span class="rule-desc">Do not promote your own Discord server, Twitch stream, YouTube channel, business, products, or services anywhere on the server.</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">16</span>
+                    <div class="rule-content">
+                        <span class="comment">// ---</span>
+                    </div>
+                </div>
+
+                <!-- Section 3: Server Interaction and Support Procedures -->
+                <div class="rule-item">
+                    <span class="line-number">17</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-green">3. SERVER INTERACTION & SUPPORT</span>
+                        <span class="rule-desc">Guidelines for engaging with the server features and staff.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">18</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-green">3.1. Choosing and Displaying Roles</span>
+                        <span class="rule-desc">Visit the designated channel (e.g., 「-✦-claim-roles-✦-」) to select your appropriate roles for access.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">19</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-green">3.2. Respect Staff and Decisions</span>
+                        <span class="rule-desc">The Moderation Team and Staff decisions are final. Address issues privately and respectfully with a higher-ranking staff member.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">20</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-green">3.2. (Cont.) No Backseat Moderating</span>
+                        <span class="rule-desc">If you see a rule broken, use the reporting tools or create a ticket—do not attempt to enforce the rules yourself.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">21</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-yellow">3.3. How to Get Support (Ticketing)</span>
+                        <span class="rule-desc">If you require assistance from staff, create a ticket in the designated channel (e.g., 「-✦-support-ticket-✦-」).</span>
+                    </div>
+                </div>
+                
+                <div class="rule-item">
+                    <span class="line-number">22</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-yellow">3.4. Ticket Detail Requirement (MANDATORY)</span>
+                        <span class="rule-desc">When opening a ticket, you MUST immediately provide detailed context in the first message. Bad Example: "Help."</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">23</span>
+                    <div class="rule-content">
+                        <span class="comment">// ---</span>
+                    </div>
+                </div>
+
+                <!-- Section 4: Final Rule -->
+                <div class="rule-item">
+                    <span class="line-number">24</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-yellow">4. FINAL RULE: USE COMMON SENSE</span>
+                        <span class="rule-desc">We expect all members to use common sense and good judgment. If unsure if something is allowed, ask a moderator privately.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">25</span>
+                    <div class="rule-content">
+                        <span class="comment">// ---</span>
+                    </div>
+                </div>
+
+                 <div class="rule-item">
+                    <span class="line-number">26</span>
+                    <div class="rule-content">
+                        <span class="rule-title syntax-yellow">1. NOTES: WE ARE NOT AFFILIATED WITH ECLIPSERP</span>
+                        <span class="rule-desc">We are not affiliated in EclipseRP in any way. We are not promotions, Are not sponsered. Were simply a community for new players to learn how to play.</span>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <span class="line-number">27</span>
+                    <div class="rule-content">
+                        <span class="comment">// --- END OF FILE ---</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="footer-note comment">
+                // Thank you for helping us keep this a great place to hang out! Moderators reserve the right to act on any behavior deemed detrimental to the community.
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="logo-link" style="font-size: 0.875rem;">
+                <div class="logo-icon" style="width: 24px; height: 24px;">
+<img style="width: 35px; border-radius: 20px;" src="assets/favicon.png">                </div>
+                <span style="font-weight: 600; color: var(--discord-text);">EclipseESK Official Website &copy; 2025</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://discord.gg/apB5FThr4H">Join Server</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle Logic
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

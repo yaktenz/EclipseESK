@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EclipseESK - Server Guides</title>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --discord-bg: #36393f;
+            --discord-dark: #2f3136;
+            --discord-darker: #202225;
+            --discord-accent: #5865F2;
+            --discord-accent-hover: #4752C4;
+            --discord-text: #8a8a8b;
+            --discord-header: #ffffff;
+            --discord-success: #3ba55c;
+            --discord-danger: #ed4245;
+            --discord-yellow: #fee75c;
+            --discord-purple: #eb459e; 
+            
+            --nav-bg: #000000;
+            --border-color: #1a1a1a;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--discord-bg);
+            color: var(--discord-text);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.2s, background-color 0.2s;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--discord-dark); 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--discord-darker); 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a1b1e; 
+        }
+
+        /* --- Utilities --- */
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        
+        /* --- Navigation --- */
+        .navbar {
+            background-color: var(--nav-bg);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo-link:hover { opacity: 0.8; }
+
+.link {
+            text-decoration: none;
+            color: var(--discord-accent);
+            transition: color 0.2s;
+        }
+        .link:hover {
+            color: var(--discord-accent-hover);
+            text-decoration: none; 
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--discord-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .logo-text {
+            color: var(--discord-header);
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: 0.025em;
+        }
+
+        /* Desktop Menu */
+        .desktop-menu {
+            display: none; /* Hidden on mobile */
+            align-items: center;
+            gap: 2rem;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            color: var(--discord-text);
+        }
+        .nav-link.active-page, .nav-link:hover {
+            color: var(--discord-header);
+        }
+
+        .btn-join {
+            background-color: var(--discord-accent);
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 4px;
+        }
+        .btn-join:hover {
+            background-color: var(--discord-accent-hover);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-toggle {
+            display: block;
+            background: none;
+            border: none;
+            color: var(--discord-text);
+            cursor: pointer;
+        }
+        .mobile-toggle:hover { color: var(--discord-header); }
+
+        /* --- Nav Dropdown (Adjusted for Index Page) --- */
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--discord-darker);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 4px;
+            padding: 0.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+        
+        .nav-dropdown:hover .dropdown-content {
+            /* Since this is now an index, the dropdown is for navigation, not anchors */
+            display: none; /* Keep it hidden as the main Guides link is the destination */
+        }
+
+        .nav-link.active-parent-link {
+            color: var(--discord-header);
+        }
+
+
+        .dropdown-content a {
+            color: var(--discord-text);
+            padding: 0.75rem 1rem;
+            display: block;
+        }
+        .dropdown-content a:hover { background-color: var(--discord-accent); color: var(--discord-header); }
+
+
+        /* Mobile Dropdown */
+        .mobile-menu {
+            display: none; /* Hidden by default */
+            background-color: #000000;
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+            padding: 1rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .mobile-menu.active {
+            display: flex;
+        }
+        .mobile-menu a {
+            display: block;
+            padding: 0.5rem 0;
+        }
+        .mobile-menu .btn-join {
+            text-align: center;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding-top: 8rem; /* Account for fixed header */
+            padding-bottom: 4rem;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: var(--discord-header);
+        }
+
+        .intro-text {
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+        
+        /* --- Guide Card Grid --- */
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- Guide Card Styling (New) --- */
+        .guide-card {
+            background-color: var(--discord-dark);
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid #1f2937;
+            box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        .guide-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            color: var(--discord-accent);
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--discord-header);
+        }
+
+        .card-summary {
+            color: #ccc;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .btn-read {
+            display: inline-block;
+            background-color: var(--discord-accent);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-read:hover {
+            background-color: var(--discord-accent-hover);
+        }
+
+
+        /* --- Footer --- */
+        .site-footer {
+            background-color: #000000;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .footer-links a:hover { color: var(--discord-header); }
+        .footer-links { color: #6b7280; font-size: 0.875rem; display: flex; gap: 1.5rem; }
+
+        /* --- Media Queries --- */
+        @media (min-width: 768px) {
+            .mobile-toggle { display: none; }
+            .desktop-menu { display: flex; }
+            .footer-content { flex-direction: row; justify-content: space-between; }
+            .page-title { font-size: 2.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <!-- Logo Section -->
+                <a href="index.html" class="logo-link">
+                    <div class="logo-icon">
+                        <img style="width: 45px; border-radius: 20px;" src="assets/favicon.png" alt="EclipseESK Logo">
+                    </div>
+                    <span class="logo-text">EclipseESK</span>
+                </a>
+
+                <!-- Desktop Links -->
+                <div class="desktop-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="rules.html" class="nav-link">Rules</a>
+                    <div class="nav-dropdown">
+                        <!-- Removed href="#anchor" links as this is the index page -->
+                        <a href="guides.html" class="nav-link ">Guides</a>
+                    </div>
+                    <a href="https://discord.gg/apB5FThr4H" class="btn-join" target="_blank">Join Server</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle Navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="mobile-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="rules.html" class="nav-link">Rules</a>
+                <a href="guides.html" class="nav-link">Guides</a>
+                <a href="https://discord.gg/apB5FThr4H" class="btn-join" target="_blank">Join Server</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content container">
+        <div class="page-header">
+            <!-- Icon representing guidance or knowledge (e.g., a scroll or open book) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5865F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <h1 class="page-title">Roleplay & Server Guides</h1>
+        </div>
+
+        <p class="intro-text">
+            This section provides essential information and tips to help new and experienced members navigate the server's roleplay environment and features. Select a guide below to enhance your experience!
+        </p>
+
+        <!-- Guide Card Grid -->
+        <div class="guide-grid">
+
+            <!-- Card 1: Getting Started -->
+            <div class="guide-card">
+                <div class="card-header">
+                    <span class="card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><path d="M12 17h.01"></path></svg>
+                    </span>
+                    <h2 class="card-title">1. Installing on RageMP</h2>
+                </div>
+                <p class="card-summary">
+                    A walkthrough on how to install it through <a class="link" href="https://rage.mp/">RageMultiplayer</a>
+                </p>
+                <a href="onl-guides/getting-started.html" class="btn-read">Read Guide</a>
+            </div>
+
+            <!-- Card 1: Getting Started -->
+            <div class="guide-card">
+                <div class="card-header">
+                    <span class="card-icon">
+                        <img style="width: 30px; border-radius: 20px;" src="assets/favicon.png" alt="EclipseESK Logo">
+                    </span>
+                    <h2 class="card-title">More Coming Soon</h2>
+                </div>
+                <p class="card-summary">
+                    - - - 
+                </p>
+                <a href="#" class="btn-read">Coming Soon!</a>
+            </div>
+
+            
+
+        </div>
+        
+
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="logo-link" style="font-size: 0.875rem;">
+                <div class="logo-icon" style="width: 24px; height: 24px;">
+                    <img style="width: 35px; border-radius: 20px;" src="assets/favicon.png" alt="EclipseESK Icon">
+                </div>
+                <span style="font-weight: 600; color: var(--discord-text);">EclipseESK Official Website &copy; 2025</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://discord.gg/apB5FThr4H" target="_blank">Join Server</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle Logic
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        menu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
