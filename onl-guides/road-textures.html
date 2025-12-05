@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EclipseESK - Getting Started Guide</title>
+    <link rel="icon" href="assets/favicon.png" type="image/png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --discord-bg: #36393f;
+            --discord-dark: #2f3136;
+            --discord-darker: #202225;
+            --discord-accent: #5865F2;
+            --discord-accent-hover: #4752C4;
+            --discord-text: #8a8a8b;
+            --discord-header: #ffffff;
+            --discord-success: #3ba55c;
+            --discord-danger: #ed4245;
+            --discord-yellow: #fee75c;
+            --discord-purple: #eb459e; 
+            
+            --nav-bg: #000000;
+            --border-color: #1a1a1a;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--discord-bg);
+            color: var(--discord-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--discord-accent);
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: var(--discord-accent-hover);
+            text-decoration: none; 
+        }
+
+        /* --- Utilities --- */
+        .container {
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .text-header {
+            color: var(--discord-header);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .text-subheader {
+            color: var(--discord-accent);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #374151;
+            padding-bottom: 0.5rem;
+        }
+        .content-section {
+            background-color: var(--discord-dark);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.2);
+        }
+        .list-item {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #ccc;
+        }
+        .list-item::before {
+            content: '⬥';
+            color: var(--discord-success);
+            position: absolute;
+            left: 0;
+            font-size: 1rem;
+        }
+        .back-button {
+            display: inline-block;
+            background-color: var(--discord-darker);
+            color: var(--discord-text);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            transition: background-color 0.2s, color 0.2s;
+            border: 1px solid #374151;
+        }
+        .back-button:hover {
+            background-color: var(--discord-accent);
+            color: white;
+        }
+        .code-block {
+            background-color: var(--discord-darker);
+            color: var(--discord-text);
+            font-family: 'Fira Code', monospace;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .text-header { font-size: 1.75rem; }
+            .text-subheader { font-size: 1.25rem; }
+            .container { padding: 0 1rem; }
+            .content-section { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <main class="container" style="padding-top: 4rem; padding-bottom: 4rem;">
+        <a href="../guides.html" class="back-button">&larr; Back to Guides</a>
+
+        <h1 class="text-header">1. Resources: Road Texture DLC RPF</h1>
+
+            <h2 class="text-subheader">Install Guide + Download Link</h2>
+            <p style="color: #ccc; margin-bottom: 1.5rem;">
+                <a href="https://mega.nz/file/sZdjTS7B#DkC-xim9DYJWA0dGYrhfHMxlui30U3jOoqT8njacw5o">Download Link</a>
+                <br><br>
+                - - - NOTE
+We do not own any rights to these textures. We simply reuploaded them. We are not partenered with the creators
+or have any rights with the mod.
+<br><br>
+- - - How to Install
+You should create a txt file in RAGE MP directory called dont-remove-expired-clientside-packages first, then you should create a folder called user_resources, then in user_resources -> global -> game_resources -> dlcpacks and create a mod folder for example "gunpack" and drop desired dlc.rpf file with your guns as example there
+<br><br>
+Create a txt file in RAGE MP From Local C:// called dont-remove-expired-clientside-packages without the .txt ext. then in user_resources -> global -> game_resources -> dlcpacks. Then inside dlcpacks paste your mod folders.
+            </p>
+    </main>
+</body>
+</html>
